@@ -10,23 +10,22 @@
     <!-- endbuild -->
     <!-- build:css -->
     <!-- endbuild -->
-    <!-- build:js -->
-    <!-- endbuild -->
+
 </head>
 
 <body>
 
-  <div class="main-container">
-      <section id = "root">
-          <section class = "route" id = "home">/home</section>
-          <section class = "route" id = "about">/about</section>
-          <section class = "route" id = "gallery">/gallery</section>
-          <section class = "route" id = "contact">/contact</section>
-          <section class = "route" id = "help">/help</section>
-      </section>
-      <button class="purify">CLEAR PARAMS</button>
-      <main id = "content">Content loading...</main>
-  </div>
+    <div class="container">
+
+        <div class="inputs">
+            <label for="bandName">BAND:</label>
+            <input type="text" name="band" id="bandName" autofocus>
+            <label for="album">ALBUM:</label>
+            <input type="text" name="album" id="album">
+        </div>
+        <button id="submitBtn" type="submit">FIND</button>
+    </div>
+    <script src="js/popup.js"></script>
 
     <!-- build:jsVendors -->
     <!-- endbuild -->

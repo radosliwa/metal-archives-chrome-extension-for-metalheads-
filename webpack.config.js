@@ -13,6 +13,7 @@ const config = {
     devtool: "cheap-module-source-map",
     entry: {
         main: './src/js/main/main.js',
+        popup: './src/js/main/popup.js'
     },
     module:babel,
     resolve: {

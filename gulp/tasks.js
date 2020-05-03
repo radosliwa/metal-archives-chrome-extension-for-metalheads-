@@ -11,7 +11,7 @@ gulp.task('vendors', gulp.parallel('css_vendors', 'jsVendors'));
 gulp.task('styles', gulp.series('css'));
 gulp.task('scripts', gulp.series('js'));
 
-gulp.task('copy', gulp.parallel('styles', 'scripts', 'html'));
+gulp.task('copy', gulp.parallel('manifest','imgs','styles', 'scripts', 'html'));
 gulp.task('default', gulp.parallel('css', 'js', 'html'));
 gulp.task('default_full', gulp.series('cleanAll','vendors', 'copy'));
 

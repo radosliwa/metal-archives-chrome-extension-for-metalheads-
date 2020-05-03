@@ -1,4 +1,2 @@
-import $ from 'jquery';
-window.jQuery = $;
-window.$ = $;
-import 'bootstrap';
+// import $ from 'jquery';
+// import 'bootstrap';

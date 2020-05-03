@@ -3,7 +3,6 @@ var watch = require('gulp-watch');
 var browserSync = require('browser-sync').create();
 
 gulp.task('watch', function() {
-
     browserSync.init({
         server: {
             baseDir: 'temp'
@@ -17,6 +16,9 @@ gulp.task('watch', function() {
     watch('./src/js/**/*.js', gulp.series('scripts', 'scriptsRefresh'));
 
     watch('package.json', gulp.series('vendors', reload));
+
+    watch(['./*.js','./manifest.json'], gulp.series('manifest'));
+
 
 });
 

@@ -29,6 +29,15 @@ gulp.task('clean', function() {
 gulp.task('cleanAll', function() {
     return del([paths.temp]);
 });
+
+gulp.task('manifest', function() {
+    return gulp.src(['./manifest.json','./background.js'],{allowEmpty:true})
+        .pipe(gulp.dest(paths.temp));
+});
+gulp.task('imgs', function() {
+    return gulp.src('./src/images/*.png')
+        .pipe(gulp.dest(paths.temp + '/images/'));
+});
 // ===========================STYLES
 
 gulp.task('css_vendors', function() {
@@ -77,6 +86,7 @@ gulp.task('html', function() {
             },
             'jsVendors': 'js/vendors.js'
         }))
+        // .pipe(rename('popup.html'))
         .pipe(gulp.dest(paths.temp));
 });
 
@@ -109,3 +119,4 @@ gulp.task('js', function() {
     // .pipe(rename('scripts' + addProjectSuffix() + '.js'))
     .pipe(gulp.dest(paths.tempJS));
 });
+
