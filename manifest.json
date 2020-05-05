@@ -13,7 +13,6 @@
       "browser_action": {
         "default_icon":"images/wolf.png",
         "default_popup":"index.html"
-
     },
     "icons": {
         "16": "images/wolf.png",
