@@ -1,37 +1,50 @@
 const submit = document.querySelector('#submitBtn');
 const bandInput = document.querySelector('#bandName');
 const album = document.querySelector('#album');
-let bandName;
-let structure={};
+
 document.addEventListener('DOMContentLoaded', ev => {
-    document.querySelector('.inputs').addEventListener('change', function (e) {
+    // collecting data-------------------------
+    let structure = collectData();
+    /*---------------------------------------*/
+
+    // populate storage and redirect-------------------------
+    document.addEventListener('keypress', (e) => {
+        var code = (e.keyCode ? e.keyCode : e.which);
+        if (code == 13 && Object.keys(structure).length !== 0) {
+            populateStorage(structure);
+            redirectToMA();
+            window.close();
+        }
+    })
+    submit.addEventListener('click', () => {
+        populateStorage(structure);
+        redirectToMA();
+        window.close();
+    })
+    /*---------------------------------------*/
+})
+
+function collectData(){
+    let obj = {}
+    document.querySelector('.inputs').addEventListener('input', (e) => {
         if (e.target.matches('#bandName')) {
-            structure.category = 'band_name';
-            structure.input = e.target.value;
+            obj.category = 'band_name';
+            obj.input = e.target.value;
         }
         if (e.target.matches('#album')) {
-            structure.category = 'album_title';
-            structure.input = e.target.value;
+            obj.category = 'album_title';
+            obj.input = e.target.value;
         }
     })
-    function popup() {
-        chrome.tabs.query({currentWindow: true, active: true}, function (tabs){
-            console.log('tabs ',tabs )
-        var activeTab = tabs[0];
-        chrome.tabs.sendMessage(activeTab.id, {"message": "start"});
-       });
+    return obj;
+}
+function populateStorage(obj) {
+    if (Object.keys(obj).length !== 0) {
+        chrome.storage.sync.set({ 'ma-structure': JSON.stringify(obj) }, null);
     }
-    
-    submit.addEventListener('click', () => {
-        if (Object.keys(structure).length !== 0) {
-            chrome.storage.sync.set({'ma-structure': JSON.stringify(structure)}, function() {
-                console.log('Value is set to ' + JSON.stringify(structure));
-              });
-            chrome.tabs.update({
-                url: "https://www.metal-archives.com/", active:true
-            })
-            popup();
-            
-        }
+}
+function redirectToMA() {
+    chrome.tabs.update({
+        url: "https://www.metal-archives.com/", active: true
     })
-})
+}

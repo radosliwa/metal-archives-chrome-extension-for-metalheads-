@@ -3,4 +3,18 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding: 1rem 2.5rem;
+    color: #fff;
+    background-color: #000;
+    border: 1px solid #000;
+    #submitBtn {
+        color: #fff;
+        background: #000;
+        border: none;
+        padding: .5rem .9rem;
+        margin-top: 1rem;
+    }
+    input + label{
+        margin-top: 1rem;
+    }
 }
