@@ -14,7 +14,6 @@ const gulp = require('gulp'),
     // HTML=============================
     htmlreplace = require('gulp-html-replace'),
     rename = require('gulp-rename'),
-    notify = require('gulp-notify'),
     sourcemaps = require('gulp-sourcemaps'),
     { pathsDev, pathsBuild } = require('./paths'),
     paths = pathsDev;
@@ -35,7 +34,7 @@ gulp.task('manifest', function() {
         .pipe(gulp.dest(paths.temp));
 });
 gulp.task('imgs', function() {
-    return gulp.src('./src/images/*.png')
+    return gulp.src('./src/images/*')
         .pipe(gulp.dest(paths.temp + '/images/'));
 });
 // ===========================STYLES
