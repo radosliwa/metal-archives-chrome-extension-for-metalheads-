@@ -1,60 +1,62 @@
 
 document.addEventListener('DOMContentLoaded', ev => {
     const submit = document.querySelector('#submitBtn');
-    const bandInput = document.querySelector('#bandName');
-    const album = document.querySelector('#album');
-
+    const inputs = document.querySelector('.inputs');
+    const bandInput = inputs.querySelector('#bandName');
+    const albumInput = inputs.querySelector('#album');
+    
     const maHandler = {
-        structure: '',
+        structure: {
+            category: '',
+            input: ''
+        },
         init() {
-            // collecting data-------------------------
-            this.structure = this.collectData();
-            /*---------------------------------------*/
+            this.collectData();
             this.bindEvents();
         },
         collectData() {
-            let obj = {}
-            document.querySelector('.inputs').addEventListener('input', (e) => {
-                if (e.target.matches('#bandName')) {
-                    obj.category = 'band_name';
-                    obj.input = e.target.value;
+            inputs.addEventListener('input', (e) => {
+                if (e.target === bandInput) {
+                    this.structure.category = 'band_name';
                 }
-                if (e.target.matches('#album')) {
-                    obj.category = 'album_title';
-                    obj.input = e.target.value;
+                if (e.target === albumInput) {
+                    this.structure.category = 'album_title';
                 }
+                this.structure.input = e.target.value;
             })
-            return obj;
         },
         bindEvents() {
+            this.collectData()
             // populate storage and redirect-------------------------
             document.addEventListener('keypress', (e) => {
-                var code = (e.keyCode ? e.keyCode : e.which);
-                if (code == 13 && Object.keys(this.structure).length !== 0) {
-                    this.populateStorage(this.structure);
-                    this.redirectToMA();
-                    window.close();
+                const code = e.key.toLowerCase()
+                if (code === 'enter' && Object.keys(this.structure).length) {
+                    this.submitAndRedirect()
                 }
             })
             submit.addEventListener('click', () => {
-                this.populateStorage(structure);
-                this.redirectToMA();
-                window.close();
+                this.submitAndRedirect()
             })
         },
         populateStorage(obj) {
-            if (Object.keys(obj).length !== 0) {
+            if (Object.keys(obj).length && chrome?.storage) {
                 chrome.storage.sync.set({ 'ma-structure': JSON.stringify(obj) }, null);
             }
         },
         redirectToMA() {
-            chrome.tabs.update({
-                url: "https://www.metal-archives.com/", active: true
-            })
+            if (chrome?.tabs) {
+                chrome.tabs.update({
+                    url: "https://www.metal-archives.com/", active: true
+                })
+            }
+        },
+        submitAndRedirect() {
+            this.populateStorage(this.structure);
+            this.redirectToMA();
+            window.close();
         }
     }
     maHandler.init();
-
 })
 
 

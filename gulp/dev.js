@@ -1,45 +1,46 @@
 const gulp = require('gulp'),
     del = require('del'),
-    // STYLES==============
+    currentProjectName = 'Metal-archives-browser',
+
+    /* STYLES START */
     autoprefixer = require('gulp-autoprefixer'),
     cssimport = require('gulp-cssimport'),
     concatCss = require('gulp-concat-css'),
     cleanCSS = require('gulp-clean-css'),
     cssNano = require('gulp-cssnano'),
     sass = require('gulp-sass'),
-    // SCRIPTS=============
+    /* STYLES END */
+
+    /* JS START */
     concatJs = require('gulp-concat'),
     webpack = require('webpack-stream'),
-    {configVendors, config} = require('../webpack.config.js'),
-    // HTML=============================
+    { configVendors, config } = require('../webpack.config.js'),
+    /* JS END */
+
+    /* HTML START */
     htmlreplace = require('gulp-html-replace'),
     rename = require('gulp-rename'),
     sourcemaps = require('gulp-sourcemaps'),
     { pathsDev, pathsBuild } = require('./paths'),
     paths = pathsDev;
-var currentProjectName = 'kill';
+/* HTML END */
 
-let addProjectSuffix = function() {
-    return currentProjectName === 'default' ? '' : currentProjectName;
-}
-gulp.task('clean', function() {
-    return del([paths.temp, '!' + paths.temp + '/**/vendors']);
-});
-gulp.task('cleanAll', function() {
-    return del([paths.temp]);
-});
 
-gulp.task('manifest', function() {
-    return gulp.src(['./manifest.json','./background.js'],{allowEmpty:true})
-        .pipe(gulp.dest(paths.temp));
-});
-gulp.task('imgs', function() {
-    return gulp.src('./src/images/*')
-        .pipe(gulp.dest(paths.temp + '/images/'));
-});
+const addProjectSuffix = () => currentProjectName ?? 'default';
+
+gulp.task('clean', () => del([paths.temp, '!' + paths.temp + '/**/vendors']));
+gulp.task('cleanAll', () => del([paths.temp]));
+
+gulp.task('manifest', () =>
+     gulp.src(['./manifest.json', './background.js'], { allowEmpty: true })
+    .pipe(gulp.dest(paths.temp))
+);
+
+gulp.task('imgs', () => gulp.src('./src/images/*')
+    .pipe(gulp.dest(paths.temp + '/images/')));
 // ===========================STYLES
 
-gulp.task('css_vendors', function() {
+gulp.task('css_vendors', () => {
     return gulp.src(paths.srcCssVendors)
         .pipe(sourcemaps.init())
         .pipe(cssimport())
@@ -52,7 +53,7 @@ gulp.task('css_vendors', function() {
         .pipe(gulp.dest(paths.tempCssVendors));
 });
 
-gulp.task('css', function() {
+gulp.task('css', () => {
     return gulp.src(paths.srcSCSS)
         .pipe(sourcemaps.init())
         .pipe(sass({ outputStyle: 'compressed' })
@@ -68,7 +69,7 @@ gulp.task('css', function() {
 });
 
 // ===========================HTML 
-gulp.task('html', function() {
+gulp.task('html', function () {
     return gulp.src(paths.srcHTML)
         .pipe(htmlreplace({
             'cssVendors': {
@@ -90,22 +91,22 @@ gulp.task('html', function() {
 });
 
 // ===========================SCRIPTS
-gulp.task('jsVendors', function() {
+gulp.task('jsVendors', function () {
     return gulp.src(paths.srcJSVendors)
-    .pipe(webpack(configVendors, null, function(err, stats) {
-        if (err) {
-            console.log(err.toString());
-        }
-        if (stats.hasErrors()) {
-            return new Error('STATS ERROR: ', stats.compilation.errors.join('\n'))
-        }
-        console.log('STATS: ', stats.toString());
-    }))
-    .pipe(gulp.dest(paths.tempJS));
+        .pipe(webpack(configVendors, null, function (err, stats) {
+            if (err) {
+                console.log(err.toString());
+            }
+            if (stats.hasErrors()) {
+                return new Error('STATS ERROR: ', stats.compilation.errors.join('\n'))
+            }
+            console.log('STATS: ', stats.toString());
+        }))
+        .pipe(gulp.dest(paths.tempJS));
 });
-gulp.task('js', function() {
+gulp.task('js', function () {
     return gulp.src(paths.srcJS)
-        .pipe(webpack(config, null, function(err, stats) {
+        .pipe(webpack(config, null, function (err, stats) {
             if (err) {
                 console.log(err.toString());
             }
@@ -115,7 +116,7 @@ gulp.task('js', function() {
             console.log('STATS: ', stats.toString());
         }))
 
-    // .pipe(rename('scripts' + addProjectSuffix() + '.js'))
-    .pipe(gulp.dest(paths.tempJS));
+        // .pipe(rename('scripts' + addProjectSuffix() + '.js'))
+        .pipe(gulp.dest(paths.tempJS));
 });
 
