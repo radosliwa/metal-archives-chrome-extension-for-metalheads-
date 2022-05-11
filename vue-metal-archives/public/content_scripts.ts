@@ -8,6 +8,8 @@ chrome.storage.sync.get(['ma-structure'], async (res) => {
     select!.value = response.category;
     searchQueryBox!.value = response.input;
     setTimeout(() => {
+        console.log('RESPONSE', response);
+
         searchForm!.submit();
     }, 500)
 });

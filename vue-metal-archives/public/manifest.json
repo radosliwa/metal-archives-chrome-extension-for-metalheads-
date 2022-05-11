@@ -6,12 +6,8 @@
     "permissions": [
         "storage"
     ],
-    "background": {
-        "service_worker": "background.js",
-        "persistent": false
-    },
     "action": {
-        "default_icon": "images/wolf.png",
+        "default_icon": "wolf.png",
         "default_popup": "index.html"
     },
     "icons": {
