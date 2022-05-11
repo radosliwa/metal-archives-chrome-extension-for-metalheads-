@@ -1,0 +1,27 @@
+{
+    "name": "metal archives search",
+    "version": "2",
+    "description": "search for bands and albums",
+    "manifest_version": 3,
+    "permissions": [
+        "storage"
+    ],
+    "background": {
+        "service_worker": "background.js",
+        "persistent": false
+    },
+    "action": {
+        "default_icon": "images/wolf.png",
+        "default_popup": "index.html"
+    },
+    "icons": {
+        "16": "wolf.png",
+        "32": "wolf.png",
+        "72": "wolf.png",
+        "96": "wolf.png"
+    },
+    "content_scripts": [{
+        "js": ["content_scripts.js"],
+        "matches": ["http://*/*", "https://*/*"]
+    }]
+}
