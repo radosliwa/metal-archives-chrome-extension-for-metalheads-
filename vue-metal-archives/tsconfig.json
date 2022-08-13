@@ -2,6 +2,7 @@
   "compilerOptions": {
     "target": "esnext",
     "useDefineForClassFields": true,
+    "outDir": "dist",
     "jsx": "preserve",
     "module": "esnext",
     "moduleResolution": "node",
@@ -10,11 +11,12 @@
     "sourceMap": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "lib": ["esnext", "dom"],
+    "lib": ["es6", "es7", "ES2017", "es2018", "ES2019", "dom"],
     "skipLibCheck": true,
     "allowJs": true,
     "noImplicitAny": false,
   },
-  "include": ["src/*", "public/content_scripts.ts"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": ["src"],
+  "exclude": ["node_modules", "public/*.ts"],
+  // "references": [{ "path": "./tsconfig.node.json" }]
 }

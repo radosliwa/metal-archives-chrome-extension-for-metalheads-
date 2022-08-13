@@ -1,6 +1,6 @@
 <template>
-    <div id="ma-container" class="bg-black p-8 min-h-screen max-w-md text-center">
-        <div class="icon-wrapper flex justify-between">
+    <div id="ma-container" class="max-w-md min-h-screen p-8 text-center bg-black">
+        <div class="flex justify-between icon-wrapper">
             <div class="pentagram">
                 <img class="pentagram" src="./assets/images/pentagram.svg" alt="pentagram">
             </div>
@@ -9,7 +9,7 @@
             </div>
         </div>
         <form id="searchForm" action="" class="flex flex-col">
-            <div class="inputs flex flex-col">
+            <div class="flex flex-col inputs">
                 <label for="bandName" class="text-white">BAND:</label>
                 <input type="text" ref="inputBand" name="band" id="bandName" autofocus>
                 <label for="album" class="text-white">ALBUM:</label>
@@ -18,7 +18,7 @@
             <div role="button" id="submitBtn" class="text-white" ref="submitBtn" type="submit"
                 @click.prevent="handleSubmit">FIND</div>
         </form>
-        <div class="icon-wrapper flex space">
+        <div class="flex icon-wrapper space">
             <div class="pentagram">
                 <img class="pentagram" src="./assets/images/pentagram.svg" alt="">
             </div>
@@ -44,81 +44,76 @@ export default defineComponent({
         const inputBand = ref<HTMLInputElement | null>(null);
         const inputAlbum = ref<HTMLInputElement | null>(null);
         const inputs: Ref<HTMLInputElement | null>[] = [inputBand, inputAlbum];
-        const formData: IFormData = reactive({
+        const formData = ref<IFormData>({
             category: '',
             input: ''
         })
-        const formReady = computed(() => formData.category.length > 0 || formData.input.length > 0);
+        const formReady = computed(() => formData.value.category.length > 0 || formData.value.input.length > 0);
 
         function handleListener(elem: any, event: string, callback: (e: Event | KeyboardEvent) => void, action: 'add' | 'remove' = 'add') {
             if (action === 'add') {
                 elem.addEventListener(event, (e: Event) => {
                     callback(e);
                 });
-            } else {
+                return
+            }
                 elem.removeEventListener(event, (e: Event) => {
                     callback(e);
                 });
-            }
         }
 
         function collectDataOnInput(): void {
             inputs.forEach(elem => {
                 const input = elem.value as HTMLInputElement;
                 handleListener(input, 'input', (e: Event) => {
-                    getDataFromInputs(formData, e);
+                    getDataFromInputs(formData.value, e);
                 });
             });
         }
 
-        function getDataFromInputs(formData: IFormData, e: Event): void {
-            let { category, input } = formData;
+        function getDataFromInputs(data: IFormData, e: Event): void {
             if (e.target === inputBand.value) {
-                category = 'band_name';
+                formData.value.category = 'band_name';
             }
             if (e.target === inputAlbum.value) {
-                category = 'album_title';
+                formData.value.category = 'album_title';
             }
-            input = (e.target as HTMLInputElement)!.value;
+            formData.value.input = (e.target as HTMLInputElement)!.value;
+            console.log('FORM DATA', formData.value);
+            
         }
 
         function populateStorage(): void {
             if (formReady && chrome?.storage) {
-                chrome.storage.sync.set({ 'ma-structure': JSON.stringify(formData) });
+                chrome.storage.sync.set({ 'ma-structure': JSON.stringify(formData.value) }, () => {
+                    console.log('stored');
+                });
             }
         }
 
-        function redirectToMA(): void {
-            // if (chrome?.tabs) {
-            //     chrome.tabs.update({
-            //         url: import.meta.env.METAL_ARCHIVES, active: true
-            //     })
-            // }
-            // manifest 3 update active tab
-
+        async function redirectToMA(): Promise<Promise<void>> {
             if (chrome?.tabs) {
-                chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+                await chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
                     // @ts-ignore
-                    chrome.tabs.update(tabs[0].id, { url: import.meta.env.METAL_ARCHIVES });
+                    chrome.tabs.update(tabs[0].id, { url: 'https://www.metal-archives.com/' });
                 });
             }
         }
         function checkIfEnterPressedAndFormReady(): void {
             handleListener(document, 'keyup', (e: KeyboardEvent | Event) => {
-                if ((e as KeyboardEvent).key === 'Enter' && Object.keys(formData).length) {
+                if ((e as KeyboardEvent).key === 'Enter' && Object.keys(formData.value).length) {
                     handleSubmit();
                 }
             })
         }
 
-        function handleSubmit(e: Event | null = null): void {
-            if (e) {
-                e.preventDefault();
-            }
+        function handleSubmit() {
             if (formReady.value) {
+                console.log('formReady.value', formReady.value);
                 populateStorage();
                 redirectToMA();
             }
+                
         }
 
         onMounted(() => {
@@ -130,7 +125,7 @@ export default defineComponent({
             inputs.forEach(elem => {
                 const input = elem.value as HTMLInputElement;
                 handleListener(input, 'input', (e: Event) => {
-                    getDataFromInputs(formData, e);
+                    getDataFromInputs(formData.value, e);
                 }, 'remove');
             });
         })

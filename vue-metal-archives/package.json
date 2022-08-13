@@ -5,15 +5,17 @@
     "scripts": {
         "dev": "vite",
         "build-app": "vue-tsc --noEmit && vite build",
-        "build-cs": "tsc --skipLibCheck dist/content_scripts.ts &&  rm dist/content_scripts.ts",
+        "build-cs": "npx tsc -p tsconfig.node.json --skipLibCheck ",
         "build": "rm -rf dist && npm run build-app && npm run build-cs",
         "preview": "vite preview"
     },
     "dependencies": {
+        "@types/es6-promise": "^3.3.0",
         "vue": "^3.2.25"
     },
     "devDependencies": {
         "@types/chrome": "^0.0.179",
+        "@types/es6-shim": "^0.31.42",
         "@typescript-eslint/eslint-plugin": "^5.14.0",
         "@typescript-eslint/parser": "^5.14.0",
         "@vitejs/plugin-vue": "^2.3.1",
@@ -22,7 +24,7 @@
         "postcss": "^8.4.13",
         "sass": "^1.51.0",
         "tailwindcss": "^3.0.24",
-        "typescript": "^4.5.4",
+        "typescript": "^4.7.3",
         "vite": "^2.9.7",
         "vue-tsc": "^0.34.7"
     }

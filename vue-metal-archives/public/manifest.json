@@ -4,7 +4,9 @@
     "description": "search for bands and albums",
     "manifest_version": 3,
     "permissions": [
-        "storage"
+        "storage",
+        "tabs",
+        "activeTab"
     ],
     "action": {
         "default_icon": "wolf.png",
@@ -17,7 +19,7 @@
         "96": "wolf.png"
     },
     "content_scripts": [{
-        "js": ["content_scripts.js"],
-        "matches": ["http://*/*", "https://*/*"]
+        "js": ["public/content_scripts.js"],
+        "matches": ["https://www.metal-archives.com/"]
     }]
 }
