@@ -1,144 +1,190 @@
 <template>
-    <div id="ma-container" class="max-w-md min-h-screen p-8 text-center bg-black">
-        <div class="flex justify-between icon-wrapper">
-            <div class="pentagram">
-                <img class="pentagram" src="./assets/images/pentagram.svg" alt="pentagram">
-            </div>
-            <div class="pentagram">
-                <img class="pentagram" src="./assets/images/pentagram.svg" alt="pentagram">
-            </div>
-        </div>
-        <form id="searchForm" action="" class="flex flex-col">
-            <div class="flex flex-col inputs">
-                <label for="bandName" class="text-white">BAND:</label>
-                <input type="text" ref="inputBand" name="band" id="bandName" autofocus>
-                <label for="album" class="text-white">ALBUM:</label>
-                <input type="text" ref="inputAlbum" name="album" id="album">
-            </div>
-            <div role="button" id="submitBtn" class="text-white" ref="submitBtn" type="submit"
-                @click.prevent="handleSubmit">FIND</div>
-        </form>
-        <div class="flex icon-wrapper space">
-            <div class="pentagram">
-                <img class="pentagram" src="./assets/images/pentagram.svg" alt="">
-            </div>
-            <div class="pentagram">
-                <img class="pentagram" src="./assets/images/pentagram.svg" alt="">
-            </div>
-        </div>
+  <div
+    id="ma-container"
+    class="max-w-md min-h-screen p-8 text-center bg-black"
+  >
+    <div class="flex justify-between icon-wrapper">
+      <div class="pentagram">
+        <img
+          class="pentagram"
+          src="./assets/images/pentagram.svg"
+          alt="pentagram"
+        >
+      </div>
+      <div class="pentagram">
+        <img
+          class="pentagram"
+          src="./assets/images/pentagram.svg"
+          alt="pentagram"
+        >
+      </div>
     </div>
+    <form
+      id="search-form"
+      action=""
+      class="flex flex-col py-4 text-xl"
+    >
+      <div class="flex flex-col inputs">
+        <!-- dropdown start -->
+        <div class="relative mb-8 text-white cursor-pointer ">
+          <div
+            class="flex items-center justify-between px-2 border-2 categories__header"
+            @click="toggleCategories"
+          >
+            <p class="py-2 text-white">
+              {{ activeCategory && !showCategories ? activeCategory : 'Choose category' }}
+            </p>
+            <Cross
+              class="h-[30px] transition-all duration-200 transform rotate-180"
+              :class="{'rotate-[360deg]': showCategories}"
+            />
+          </div>
+          <ul
+            v-if="showCategories"
+            class="absolute w-full bg-black"
+          >
+            <li
+              class="py-2 border-x-2 hover:bg-zinc-600"
+              @click="activeCategory = Category.ARTIST; showCategories = !showCategories"
+            >
+              <p> {{ Category.ARTIST.toUpperCase() }} </p>
+            </li>
+            <li
+              class="py-2 border-2 hover:bg-zinc-600"
+              @click="activeCategory = Category.ALBUM; showCategories = !showCategories"
+            >
+              <p> {{ Category.ALBUM.toUpperCase() }} </p>
+            </li>
+          </ul>
+        </div>
+        <!-- dropdown end -->
+
+        <label
+          :for="`${activeCategory}-input`"
+          class="absolute invisible text-white"
+        >
+          {{ activeCategory.toUpperCase() }}
+        </label>
+        <input
+          :id="`${activeCategory}-input`"
+          type="text"
+          :name="`${activeCategory}-input`"
+          class="p-2 mb-4 placeholder:text-red-600"
+          :placeholder="inputError ? `Input required!` : ''"
+          autofocus
+        >
+      </div>
+      <div
+        id="submitBtn"
+        role="button"
+        class="relative flex items-center justify-center text-white cursor-pointer"
+        type="submit"
+        @click="handleSubmit"
+        @mouseenter="findHovered = true;"
+        @mouseleave="findHovered = false"
+      >
+        <Sword
+          class="bg-transparent max-w-20 rotate-[-47deg] max-h-[50px] absolute left-2 transition-all duration-200 ease-in"
+          :class="[{'transform translate-x-14': findHovered}, 
+                   {'transform translate-x-24 duration-75': findSelected}]"
+        />
+        FIND
+        <Sword 
+          class="bg-transparent max-w-20 rotate-[132deg] max-h-[50px] absolute right-2 transition-all duration-200 ease-in"
+          :class="[{'transform -translate-x-14': findHovered}, 
+                   {'transform -translate-x-24 duration-75': findSelected}]"
+        /> 
+      </div>
+    </form>
+  </div>
 </template>
 
+<script setup lang="ts">
+import {
+  Ref,
+  computed,
+  defineComponent,
+  onMounted,
+  onUnmounted,
+  reactive,
+  ref,
+} from 'vue'
+import Sword from './assets/images/sword.svg'
+import Cross from './assets/images/cross.svg'
 
-<script lang="ts">
-import { defineComponent, onMounted, reactive, Ref, ref, onUnmounted, computed } from 'vue'
-
-interface IFormData {
-    category: string;
-    input: string;
+enum Category {
+  ARTIST = 'Artist',
+  ALBUM = 'Album',
 }
 
-export default defineComponent({
-    setup() {
-        const submitBtn = ref<HTMLDivElement | null>(null);
-        const inputBand = ref<HTMLInputElement | null>(null);
-        const inputAlbum = ref<HTMLInputElement | null>(null);
-        const inputs: Ref<HTMLInputElement | null>[] = [inputBand, inputAlbum];
-        const formData = ref<IFormData>({
-            category: '',
-            input: ''
-        })
-        const formReady = computed(() => formData.value.category.length > 0 || formData.value.input.length > 0);
+interface IFormData {
+  category: string;
+  input: string;
+}
 
-        function handleListener(elem: any, event: string, callback: (e: Event | KeyboardEvent) => void, action: 'add' | 'remove' = 'add') {
-            if (action === 'add') {
-                elem.addEventListener(event, (e: Event) => {
-                    callback(e);
-                });
-                return
-            }
-                elem.removeEventListener(event, (e: Event) => {
-                    callback(e);
-                });
-        }
+const activeCategory = ref('')
+const showCategories = ref(false)
+const findSelected = ref(false)
+const inputError = ref(false)
 
-        function collectDataOnInput(): void {
-            inputs.forEach(elem => {
-                const input = elem.value as HTMLInputElement;
-                handleListener(input, 'input', (e: Event) => {
-                    getDataFromInputs(formData.value, e);
-                });
-            });
-        }
-
-        function getDataFromInputs(data: IFormData, e: Event): void {
-            if (e.target === inputBand.value) {
-                formData.value.category = 'band_name';
-            }
-            if (e.target === inputAlbum.value) {
-                formData.value.category = 'album_title';
-            }
-            formData.value.input = (e.target as HTMLInputElement)!.value;
-            console.log('FORM DATA', formData.value);
-            
-        }
-
-        function populateStorage(): void {
-            if (formReady && chrome?.storage) {
-                chrome.storage.sync.set({ 'ma-structure': JSON.stringify(formData.value) }, () => {
-                    console.log('stored');
-                });
-            }
-        }
-
-        async function redirectToMA(): Promise<Promise<void>> {
-            if (chrome?.tabs) {
-                await chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-                    // @ts-ignore
-                    chrome.tabs.update(tabs[0].id, { url: 'https://www.metal-archives.com/' });
-                });
-            }
-        }
-        function checkIfEnterPressedAndFormReady(): void {
-            handleListener(document, 'keyup', (e: KeyboardEvent | Event) => {
-                if ((e as KeyboardEvent).key === 'Enter' && Object.keys(formData.value).length) {
-                    handleSubmit();
-                }
-            })
-        }
-
-        function handleSubmit() {
-            if (formReady.value) {
-                console.log('formReady.value', formReady.value);
-                populateStorage();
-                redirectToMA();
-            }
-                
-        }
-
-        onMounted(() => {
-            collectDataOnInput()
-            checkIfEnterPressedAndFormReady()
-        })
-
-        onUnmounted(() => {
-            inputs.forEach(elem => {
-                const input = elem.value as HTMLInputElement;
-                handleListener(input, 'input', (e: Event) => {
-                    getDataFromInputs(formData.value, e);
-                }, 'remove');
-            });
-        })
-
-        return {
-            submitBtn,
-            inputBand,
-            inputAlbum,
-            handleSubmit
-        }
-    }
+const toggleCategories = () => {
+  showCategories.value = !showCategories.value
+}
+const findHovered = ref(false)
+const inputBand = ref<HTMLInputElement>()
+const inputAlbum = ref<HTMLInputElement>()
+const formData = ref<IFormData>({
+  category: '',
+  input: '',
 })
+const formReady = computed<boolean>(
+  () => formData.value.category.length > 0 || formData.value.input.length > 0
+)
+
+function getDataFromInputs(data: IFormData, e: Event): void {
+  if (e.target === inputBand.value) {
+    formData.value.category = 'band_name'
+  }
+  if (e.target === inputAlbum.value) {
+    formData.value.category = 'album_title'
+  }
+  formData.value.input = (e.target as HTMLInputElement)!.value
+  console.log('FORM DATA', formData.value)
+}
+
+function populateStorage(): void {
+  if (formReady.value && chrome?.storage) {
+    chrome.storage.sync.set({ 'ma-structure': JSON.stringify(formData.value) }, () => {
+      console.log('stored')
+    })
+  }
+}
+
+async function redirectToMA(): Promise<Promise<void>> {
+  if (chrome?.tabs) {
+    await chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      // @ts-ignore
+      chrome.tabs.update(tabs[0].id, { url: 'https://www.metal-archives.com/' })
+    })
+  }
+}
+
+function handleSubmit() {
+  findHovered.value = false
+  if (formReady.value) {
+    inputError.value = false
+    findSelected.value = true
+    populateStorage()
+    redirectToMA()
+    return
+  }
+  inputError.value = true
+}
 </script>
 
 <style lang="scss">
+* {
+    font-family: 'Oswald', sans-serif;
+    box-sizing: border-box;
+}
 </style>
