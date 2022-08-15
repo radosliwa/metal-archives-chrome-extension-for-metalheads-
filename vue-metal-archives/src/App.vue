@@ -59,6 +59,7 @@
         </div>
         <!-- dropdown end -->
 
+        <!-- INPUT STARTS -->
         <label
           :for="`${activeCategory}-input`"
           class="absolute invisible text-white"
@@ -70,9 +71,11 @@
           type="text"
           :name="`${activeCategory}-input`"
           class="p-2 mb-4 placeholder:text-red-600"
-          :placeholder="inputError ? `Input required!` : ''"
+          :placeholder="isInputError ? `Input required!` : ''"
           autofocus
+          @input="handleInput($event, activeCategory)"
         >
+        <!-- INPUT ENDS -->
       </div>
       <div
         id="submitBtn"
@@ -101,12 +104,7 @@
 
 <script setup lang="ts">
 import {
-  Ref,
   computed,
-  defineComponent,
-  onMounted,
-  onUnmounted,
-  reactive,
   ref,
 } from 'vue'
 import Sword from './assets/images/sword.svg'
@@ -117,40 +115,43 @@ enum Category {
   ALBUM = 'Album',
 }
 
+type TCategory = `${Category}` | ''
+
 interface IFormData {
-  category: string;
+  category: TCategory;
   input: string;
 }
 
-const activeCategory = ref('')
+const activeCategory = ref<TCategory>('')
 const showCategories = ref(false)
 const findSelected = ref(false)
-const inputError = ref(false)
-
-const toggleCategories = () => {
-  showCategories.value = !showCategories.value
-}
+const isInputError = ref(false)
 const findHovered = ref(false)
-const inputBand = ref<HTMLInputElement>()
-const inputAlbum = ref<HTMLInputElement>()
 const formData = ref<IFormData>({
   category: '',
   input: '',
 })
+
+const toggleCategories = () => {
+  showCategories.value = !showCategories.value
+}
+
+const handleInput = (e: Event, category: TCategory) => {
+  const input =(e.target as HTMLInputElement).value
+  formData.value.category = category
+  formData.value.input = input
+  console.log('formData', formData.value) 
+  
+  // if (e.key === 'Enter') {
+  //   handleSubmit()
+  // }
+
+  // input value
+  
+}
 const formReady = computed<boolean>(
   () => formData.value.category.length > 0 || formData.value.input.length > 0
 )
-
-function getDataFromInputs(data: IFormData, e: Event): void {
-  if (e.target === inputBand.value) {
-    formData.value.category = 'band_name'
-  }
-  if (e.target === inputAlbum.value) {
-    formData.value.category = 'album_title'
-  }
-  formData.value.input = (e.target as HTMLInputElement)!.value
-  console.log('FORM DATA', formData.value)
-}
 
 function populateStorage(): void {
   if (formReady.value && chrome?.storage) {
@@ -160,7 +161,7 @@ function populateStorage(): void {
   }
 }
 
-async function redirectToMA(): Promise<Promise<void>> {
+async function redirectToMA(): Promise<void> {
   if (chrome?.tabs) {
     await chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       // @ts-ignore
@@ -169,16 +170,16 @@ async function redirectToMA(): Promise<Promise<void>> {
   }
 }
 
-function handleSubmit() {
+function handleSubmit(): void {
   findHovered.value = false
   if (formReady.value) {
-    inputError.value = false
+    isInputError.value = false
     findSelected.value = true
     populateStorage()
     redirectToMA()
     return
   }
-  inputError.value = true
+  isInputError.value = true
 }
 </script>
 
