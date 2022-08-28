@@ -1,22 +1,20 @@
 <template>
   <div
     id="ma-container"
-    class="max-w-md min-h-screen p-8 text-center bg-black"
+    class="p-8 text-center bg-black w-96"
   >
     <div class="flex justify-between icon-wrapper">
       <div class="pentagram">
-        <img
+        <Pentagram
           class="pentagram"
-          src="./assets/images/pentagram.svg"
           alt="pentagram"
-        >
+        />
       </div>
       <div class="pentagram">
-        <img
+        <Pentagram
           class="pentagram"
-          src="./assets/images/pentagram.svg"
           alt="pentagram"
-        >
+        />
       </div>
     </div>
     <form
@@ -41,6 +39,7 @@
           </div>
           <ul
             v-if="showCategories"
+            ref="list"
             class="absolute w-full bg-black"
           >
             <li
@@ -89,13 +88,13 @@
         <Sword
           class="bg-transparent max-w-20 rotate-[-47deg] max-h-[50px] absolute left-2 transition-all duration-200 ease-in"
           :class="[{'transform translate-x-14': findHovered}, 
-                   {'transform translate-x-24 duration-75': findSelected}]"
+                   {'transform translate-x-20 duration-75': findSelected}]"
         />
         FIND
         <Sword 
           class="bg-transparent max-w-20 rotate-[132deg] max-h-[50px] absolute right-2 transition-all duration-200 ease-in"
           :class="[{'transform -translate-x-14': findHovered}, 
-                   {'transform -translate-x-24 duration-75': findSelected}]"
+                   {'transform -translate-x-20 duration-75': findSelected}]"
         /> 
       </div>
     </form>
@@ -107,12 +106,14 @@ import {
   computed,
   ref,
 } from 'vue'
-import Sword from './assets/images/sword.svg'
-import Cross from './assets/images/cross.svg'
+import Sword from '@/assets/images/sword.svg'
+import Cross from '@/assets/images/cross.svg'
+import Pentagram from '@/assets/images/pentagram.svg'
+import { onClickOutside } from '@vueuse/core'
 
 enum Category {
-  ARTIST = 'Artist',
-  ALBUM = 'Album',
+  ARTIST = 'artist_alias',
+  ALBUM = 'album_title',
 }
 
 type TCategory = `${Category}` | ''
@@ -122,6 +123,7 @@ interface IFormData {
   input: string;
 }
 
+const list = ref(null)
 const activeCategory = ref<TCategory>('')
 const showCategories = ref(false)
 const findSelected = ref(false)
@@ -132,6 +134,8 @@ const formData = ref<IFormData>({
   input: '',
 })
 
+onClickOutside(list, () => showCategories.value = false)
+
 const toggleCategories = () => {
   showCategories.value = !showCategories.value
 }
@@ -141,12 +145,6 @@ const handleInput = (e: Event, category: TCategory) => {
   formData.value.category = category
   formData.value.input = input
   console.log('formData', formData.value) 
-  
-  // if (e.key === 'Enter') {
-  //   handleSubmit()
-  // }
-
-  // input value
   
 }
 const formReady = computed<boolean>(

@@ -24,6 +24,7 @@ module.exports = {
       'before': false,
       'after': true
     }],
+    '@typescript-eslint/no-non-null-assertion': 'off',
     'vue/script-setup-uses-vars': 'error',
     // 'sort-imports': ['error', {
     //   'ignoreCase': false,
