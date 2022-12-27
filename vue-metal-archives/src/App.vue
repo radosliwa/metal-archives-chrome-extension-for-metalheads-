@@ -106,9 +106,9 @@ import {
   computed,
   ref,
 } from 'vue'
-import Sword from '@/assets/images/sword.svg'
-import Cross from '@/assets/images/cross.svg'
-import Pentagram from '@/assets/images/pentagram.svg'
+import Sword from '@/assets/images/sword.svg?component'
+import Cross from '@/assets/images/cross.svg?component'
+import Pentagram from '@/assets/images/pentagram.svg?component'
 import { onClickOutside } from '@vueuse/core'
 
 enum Category {
@@ -147,9 +147,7 @@ const handleInput = (e: Event, category: TCategory) => {
   console.log('formData', formData.value) 
   
 }
-const formReady = computed<boolean>(
-  () => formData.value.category.length > 0 || formData.value.input.length > 0
-)
+const formReady = computed<boolean>(() => formData.value.category.length > 0 || formData.value.input.length > 0)
 
 function populateStorage(): void {
   if (formReady.value && chrome?.storage) {
@@ -159,9 +157,9 @@ function populateStorage(): void {
   }
 }
 
-async function redirectToMA(): Promise<void> {
+const redirectToMA = (): void => {
   if (chrome?.tabs) {
-    await chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       // @ts-ignore
       chrome.tabs.update(tabs[0].id, { url: 'https://www.metal-archives.com/' })
     })

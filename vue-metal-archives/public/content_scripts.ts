@@ -7,6 +7,7 @@ chrome.storage.sync.get(['ma-structure'], async (res: { [x: string]: string; }) 
   const select: HTMLSelectElement | null = document.querySelector('#search_form select')
   select!.value = response?.category || ''
   searchQueryBox!.value = response?.input || ''
+  
   setTimeout(() => {
     searchFormBtn!.click()
   }, 1500)
