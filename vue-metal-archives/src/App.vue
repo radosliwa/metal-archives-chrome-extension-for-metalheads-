@@ -44,21 +44,13 @@
           >
             <li
               class="py-2 border-x-2 hover:bg-zinc-600"
-              @click="
-                activeCategory.optionValue = OptionValue.BAND;
-                activeCategory.copy = 'Band';
-                showCategories = !showCategories;
-              "
+              @click="handleCategoryChange({ option: OptionValue.BAND, copy: CategoryCopy.BAND })"
             >
               <p> Band </p>
             </li>
             <li
               class="py-2 border-2 hover:bg-zinc-600"
-              @click="
-                activeCategory.optionValue = OptionValue.ALBUM;
-                activeCategory.copy = 'Album';
-                showCategories = !showCategories;
-              "
+              @click="handleCategoryChange({ option: OptionValue.ALBUM, copy: CategoryCopy.ALBUM })"
             >
               <p>Album</p>
             </li>
@@ -120,23 +112,7 @@ import Sword from '@/assets/images/sword.svg?component'
 import Cross from '@/assets/images/cross.svg?component'
 import Pentagram from '@/assets/images/pentagram.svg?component'
 import { onClickOutside } from '@vueuse/core'
-
-enum OptionValue {
-  BAND = 'band_name',
-  ALBUM = 'album_title',
-}
-
-type TCategory = `${OptionValue}` | '';
-
-interface IFormData {
-  category: TCategory;
-  input: string;
-}
-
-interface IActiveCategory {
-  optionValue: TCategory;
-  copy: 'Band' | 'Album' | '';
-}
+import { OptionValue, TOptionValue, IFormData, IActiveCategory, CategoryCopy, TCategoryCopy } from '@/types'
 
 const options = ref(null)
 
@@ -149,6 +125,7 @@ const showCategories = ref(false)
 const findSelected = ref(false)
 const isInputError = ref(false)
 const findHovered = ref(false)
+
 const formData = ref<IFormData>({
   category: activeCategory.value.optionValue,
   input: '',
@@ -160,7 +137,7 @@ const toggleCategories = () => {
   showCategories.value = !showCategories.value
 }
 
-const handleInput = (e: Event, category: TCategory) => {
+const handleInput = (e: Event, category: TOptionValue) => {
   const input = (e.target as HTMLInputElement).value
   formData.value.category = category
   formData.value.input = input
@@ -195,6 +172,15 @@ const handleSubmit = () => {
     return
   }
   isInputError.value = true
+}
+
+const handleCategoryChange = ({ option, copy }:{
+  option: TOptionValue,
+  copy: TCategoryCopy
+}) => {
+  activeCategory.value.optionValue = option
+  activeCategory.value.copy = copy
+  showCategories.value = !showCategories.value
 }
 </script>
 

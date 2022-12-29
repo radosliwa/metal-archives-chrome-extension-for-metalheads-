@@ -7,7 +7,9 @@
         "build-app": "vue-tsc --noEmit && vite build",
         "build-cs": "npx tsc -p tsconfig.node.json --skipLibCheck ",
         "build": "rm -rf dist && npm run build-app && npm run build-cs",
-        "preview": "vite preview"
+        "preview": "vite preview",
+        "lint": "eslint -c .eslintrc.js \"**/*.{vue,ts,js}\"",
+        "lint:fix": "eslint -c .eslintrc.js \"**/*.{vue,ts,js}\" --fix"
     },
     "dependencies": {
         "@types/es6-promise": "^3.3.0",

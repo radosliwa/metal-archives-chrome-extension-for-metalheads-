@@ -2,7 +2,7 @@ module.exports = {
   plugins: [
     'babel'
   ],
-  ignorePatterns: ['dist/', 'node_modules/'],
+  ignorePatterns: ['dist/', 'node_modules/', '*.config.js', '.eslintrc.js'],
   extends: [
     'plugin:vue/vue3-recommended',
     'plugin:@typescript-eslint/recommended',
@@ -49,6 +49,7 @@ module.exports = {
       }
     ],
     '@typescript-eslint/triple-slash-reference': ['off'],
-    '@typescript-eslint/ban-ts-comment': ['warn']
+    '@typescript-eslint/ban-ts-comment': ['warn'],
+    'object-curly-spacing': ['error', 'always']
   }
 }
