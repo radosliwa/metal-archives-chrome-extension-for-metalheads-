@@ -1,18 +1,18 @@
 <template>
   <div
     id="ma-container"
-    class="p-8 text-center bg-black w-96"
+    class="p-8 text-center bg-black w-96 rounded-xl"
   >
     <div class="flex justify-between icon-wrapper">
       <div class="pentagram">
         <Pentagram
-          class="pentagram"
+          class="scale-150"
           alt="pentagram"
         />
       </div>
       <div class="pentagram">
         <Pentagram
-          class="pentagram"
+          class="scale-150"
           alt="pentagram"
         />
       </div>
@@ -46,7 +46,7 @@
               class="py-2 border-x-2 hover:bg-zinc-600"
               @click="handleCategoryChange({ option: OptionValue.BAND, copy: CategoryCopy.BAND })"
             >
-              <p> Band </p>
+              <p>Band</p>
             </li>
             <li
               class="py-2 border-2 hover:bg-zinc-600"
