@@ -25,13 +25,13 @@
           class="absolute z-10 w-full bg-black"
         >
           <li
-            class="py-3 border-x-2 hover:bg-zinc-600"
+            class="py-3 border-x-2 hover:bg-zinc-600 category-item"
             @click="handleCategoryChange({ option: OptionValue.BAND, copy: CategoryCopy.BAND })"
           >
             <p>Band</p>
           </li>
           <li
-            class="py-3 border-2 hover:bg-zinc-600"
+            class="py-3 border-2 hover:bg-zinc-600 category-item"
             @click="handleCategoryChange({ option: OptionValue.ALBUM, copy: CategoryCopy.ALBUM })"
           >
             <p>Album</p>

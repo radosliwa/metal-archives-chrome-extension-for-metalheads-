@@ -17,7 +17,8 @@
     "noImplicitAny": false,
     "types": [
       "node",
-      "chrome"
+      "chrome",
+      "vitest/globals"
     ],
     "paths": {
       "@/*": ["./src/*"]
