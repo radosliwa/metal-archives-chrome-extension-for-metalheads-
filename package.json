@@ -10,14 +10,10 @@
         "preview": "vite preview",
         "lint": "eslint -c .eslintrc.js \"**/*.{vue,ts,js}\"",
         "lint:fix": "eslint -c .eslintrc.js \"**/*.{vue,ts,js}\" --fix",
-        "test": "vitest",
+        "test": "vitest run",
         "coverage": "vitest run --coverage"
     },
-    "husky": {
-        "hooks": {
-            "pre-commit": "yarn lint:fix && yarn test"
-        }
-    },
+
     "dependencies": {
         "@types/es6-promise": "^3.3.0",
         "vue": "^3.2.25"
