@@ -1,21 +1,21 @@
-enum OptionValue {
-  BAND = 'band_name',
-  ALBUM = 'album_title',
-}
+const OptionValue = {
+  BAND: 'band_name',
+  ALBUM: 'album_title',
+} as const
 
-enum CategoryCopy {
-  BAND = 'Band',
-  ALBUM = 'Album',
-}
+const CategoryCopy = {
+  BAND: 'Band',
+  ALBUM: 'Album',
+} as const
 
 enum ErrorMsg {
   INPUT = 'Input is required!',
   CATEGORY = 'Category is required!',
 }
 
-type TOptionValue = `${OptionValue}` | '';
+type TOptionValue = typeof OptionValue[keyof typeof OptionValue] | '';
 
-type TCategoryCopy = `${CategoryCopy}` | '';
+type TCategoryCopy = typeof CategoryCopy[keyof typeof CategoryCopy] | '';
 
 interface IFormData {
   category: TOptionValue;

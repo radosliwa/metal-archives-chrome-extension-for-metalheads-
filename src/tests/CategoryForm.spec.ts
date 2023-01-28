@@ -16,6 +16,17 @@ describe('CategoryForm component', () => {
     expect(wrapper.find('input').exists()).toBe(true)
   })
 
+  test('shoud be able to see all the available categories', async () => {
+    const category = wrapper.find('.categories__header')
+    await category.trigger('click')
+    
+    const availableCategories = ['Band', 'Album']
+
+    wrapper.findAll('.category-item').forEach((item) => {
+      expect(availableCategories).toContain(item.text())
+    })
+  })
+
   test('should be able to select a category', async () => {
     const category = wrapper.find('.categories__header')
 

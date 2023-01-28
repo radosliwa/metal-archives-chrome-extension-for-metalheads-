@@ -13,6 +13,11 @@
         "test": "vitest --port 5000",
         "coverage": "vitest run --coverage"
     },
+    "husky": {
+        "hooks": {
+          "pre-commit": "yarn lint:fix && yarn test"
+        }
+      },
     "dependencies": {
         "@types/es6-promise": "^3.3.0",
         "vue": "^3.2.25"
@@ -32,6 +37,7 @@
         "eslint": "^8.16.0",
         "eslint-plugin-babel": "^5.3.1",
         "eslint-plugin-vue": "^9.0.1",
+        "husky": "^8.0.3",
         "jsdom": "^21.1.0",
         "path": "^0.12.7",
         "postcss": "^8.4.13",
