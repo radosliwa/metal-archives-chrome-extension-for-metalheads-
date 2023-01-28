@@ -10,14 +10,14 @@
         "preview": "vite preview",
         "lint": "eslint -c .eslintrc.js \"**/*.{vue,ts,js}\"",
         "lint:fix": "eslint -c .eslintrc.js \"**/*.{vue,ts,js}\" --fix",
-        "test": "vitest --port 5000",
+        "test": "vitest",
         "coverage": "vitest run --coverage"
     },
     "husky": {
         "hooks": {
-          "pre-commit": "yarn lint:fix && yarn test"
+            "pre-commit": "yarn lint:fix && yarn test"
         }
-      },
+    },
     "dependencies": {
         "@types/es6-promise": "^3.3.0",
         "vue": "^3.2.25"
@@ -46,7 +46,7 @@
         "typescript": "^4.7.3",
         "vite": "latest",
         "vite-svg-loader": "^3.4.0",
-        "vitest": "latest",
+        "vitest": "^0.28.3",
         "vue-tsc": "^0.34.7"
     }
 }
