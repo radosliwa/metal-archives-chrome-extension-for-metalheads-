@@ -26,13 +26,13 @@
         >
           <li
             class="py-3 border-x-2 hover:bg-zinc-600 category-item"
-            @click="handleCategoryChange({ option: OptionValue.BAND, copy: CategoryCopy.BAND })"
+            @click="handleCategoryChange({ option: OptionValue.BAND, categoryCopy: CategoryCopy.BAND })"
           >
             <p>Band</p>
           </li>
           <li
             class="py-3 border-2 hover:bg-zinc-600 category-item"
-            @click="handleCategoryChange({ option: OptionValue.ALBUM, copy: CategoryCopy.ALBUM })"
+            @click="handleCategoryChange({ option: OptionValue.ALBUM, categoryCopy: CategoryCopy.ALBUM })"
           >
             <p>Album</p>
           </li>
@@ -118,10 +118,10 @@ onClickOutside(options, () => (showCategories.value = false))
 
 const toggleCategoriesVisibility = () => showCategories.value = !showCategories.value 
 
-const handleCategoryChange = ({ option, copy }: {option: TOptionValue, copy: TCategoryCopy}) => {
+const handleCategoryChange = ({ option, categoryCopy }: {option: TOptionValue, categoryCopy: TCategoryCopy}) => {
   isInputError.value = ''
   formData.value.category = option
-  categoryName.value = copy
+  categoryName.value = categoryCopy
   showCategories.value = !showCategories.value
 }
 
@@ -155,15 +155,13 @@ const handleSubmit = () => {
     return
   }
   
-  if (isFormReady.value) {
-    isInputError.value = ''
-    findSelected.value = true
-    populateStorage()
-    redirectToMA()
-    setTimeout(() => {
-      findSelected.value = false
-    }, 300)
-  }
+  isInputError.value = ''
+  findSelected.value = true
+  populateStorage()
+  redirectToMA()
+  setTimeout(() => {
+    findSelected.value = false
+  }, 300)
 }
 
 </script>
