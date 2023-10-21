@@ -1,14 +1,19 @@
 module.exports = {
   plugins: [
-    'babel'
+    "@typescript-eslint",
+    'sort-exports'
   ],
   ignorePatterns: ['dist/', 'node_modules/', '*.config.js', '.eslintrc.js'],
   extends: [
     'plugin:vue/vue3-recommended',
+    'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     '@vue/typescript/recommended'
   ],
   parser: 'vue-eslint-parser',
+  parserOptions: {
+    parser: '@typescript-eslint/parser',
+  },
   rules: {
     'semi': ['error', 'never'],
     'no-console': 'warn',
@@ -26,13 +31,14 @@ module.exports = {
     }],
     '@typescript-eslint/no-non-null-assertion': 'off',
     'vue/script-setup-uses-vars': 'error',
-    // 'sort-imports': ['error', {
-    //   'ignoreCase': false,
-    //   'ignoreDeclarationSort': false,
-    //   'ignoreMemberSort': false,
-    //   'memberSyntaxSortOrder': ['none', 'all', 'multiple', 'single'],
-    //   'allowSeparatedGroups': false
-    // }],
+    'sort-imports': ['error', {
+      'ignoreCase': false,
+      'ignoreDeclarationSort': false,
+      'ignoreMemberSort': false,
+      'memberSyntaxSortOrder': ['none', 'all', 'multiple', 'single'],
+      'allowSeparatedGroups': false
+    }],
+    'sort-exports/sort-exports': ['error'],
     'quotes': [
       'error',
       'single',

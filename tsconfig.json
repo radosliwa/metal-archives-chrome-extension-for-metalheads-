@@ -1,9 +1,7 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "useDefineForClassFields": true,
     "outDir": "dist",
-    "jsx": "preserve",
     "module": "esnext",
     "moduleResolution": "node",
     "isolatedModules": false,
@@ -11,10 +9,8 @@
     "sourceMap": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "lib": ["es6", "es7", "ES2017", "es2018", "ES2019", "dom"],
     "skipLibCheck": true,
     "allowJs": true,
-    "noImplicitAny": false,
     "types": [
       "node",
       "chrome",

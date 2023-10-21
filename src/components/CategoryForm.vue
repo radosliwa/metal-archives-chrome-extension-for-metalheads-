@@ -55,6 +55,7 @@
         class="p-2 mb-4 placeholder:text-red-600"
         :placeholder="!formData.input ? isInputError : ''"
         autofocus
+        autocomplete="on"
         @input="isInputError = ''"
       >
       <!-- INPUT ENDS -->
@@ -90,11 +91,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed, Ref, ref } from 'vue'
+import { OptionValue, TOptionValue, IFormData, CategoryCopy, TCategoryCopy, ErrorMsg } from '@/types'
+import { computed, ref } from 'vue'
 import Sword from '@/assets/images/sword.svg?component'
 import Cross from '@/assets/images/cross.svg?component'
 import { onClickOutside } from '@vueuse/core'
-import { OptionValue, TOptionValue, IFormData, CategoryCopy, TCategoryCopy, ErrorMsg } from '@/types'
 
 const emit = defineEmits(['redirect-to-ma'])
 
@@ -133,15 +134,15 @@ const populateStorage = (): void => {
 
 const redirectToMA = (): void => emit('redirect-to-ma')
 
-const errorHandler = (formData: Ref<IFormData>) => {
+const errorHandler = (formData: IFormData) => {
   
-  if (!formData.value.category) {
-    formData.value.input = ''
+  if (!formData.category) {
+    formData.input = ''
     isInputError.value = ErrorMsg.CATEGORY
     return
   }
   
-  if (!formData.value.input) {
+  if (!formData.input) {
     isInputError.value = ErrorMsg.INPUT
     return
   }
@@ -151,7 +152,7 @@ const handleSubmit = () => {
   findHovered.value = false
   
   if (!isFormReady.value) {
-    errorHandler(formData)
+    errorHandler(formData.value)
     return
   }
   

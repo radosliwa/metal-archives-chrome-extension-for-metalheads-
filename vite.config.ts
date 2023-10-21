@@ -1,4 +1,3 @@
-// / <reference types="vitest" />
 import svgLoader from 'vite-svg-loader'
 import path from 'path'
 import vue from '@vitejs/plugin-vue'

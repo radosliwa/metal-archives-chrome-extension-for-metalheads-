@@ -1,5 +1,5 @@
+import { VueWrapper, mount } from '@vue/test-utils'
 import { expect, test } from 'vitest'
-import { mount, VueWrapper } from '@vue/test-utils'
 import CategoryForm from '@/components/CategoryForm.vue'
 import { ErrorMsg } from '@/types'
 
