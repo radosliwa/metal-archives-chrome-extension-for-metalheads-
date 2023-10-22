@@ -2,6 +2,7 @@ import { VueWrapper, mount } from '@vue/test-utils'
 import { expect, test } from 'vitest'
 import CategoryForm from '@/components/CategoryForm.vue'
 import { ErrorMsg } from '@/types'
+import { CategoryCopy } from '@/types'
 
 describe('CategoryForm component', () => {
   let wrapper: VueWrapper<any>
@@ -20,7 +21,7 @@ describe('CategoryForm component', () => {
     const category = wrapper.find('.categories__header')
     await category.trigger('click')
     
-    const availableCategories = ['Band', 'Album']
+    const availableCategories = Object.values(CategoryCopy)
 
     wrapper.findAll('.category-item').forEach((item) => {
       expect(availableCategories).toContain(item.text())

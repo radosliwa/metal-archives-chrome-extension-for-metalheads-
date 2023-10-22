@@ -3,6 +3,13 @@ module.exports = {
     "@typescript-eslint",
     'sort-exports'
   ],
+  env: {
+    browser: true,
+    "vue/setup-compiler-macros": true
+  },
+  globals: {
+    chrome: 'readonly'
+  },
   ignorePatterns: ['dist/', 'node_modules/', '*.config.js', '.eslintrc.js'],
   extends: [
     'plugin:vue/vue3-recommended',
@@ -20,7 +27,7 @@ module.exports = {
     'max-len': [
       'error',
       {
-        code: 160
+        code: 120
       }
     ],
     '@typescript-eslint/indent': ['warn', 2],

@@ -12,7 +12,7 @@
           @click="toggleCategoriesVisibility"
         >
           <p class="py-3 text-white">
-            {{ categoryName && !showCategories ? categoryName : "Choose category" }}
+            {{ selectedCategory && !showCategories ? selectedCategory : "Choose category" }}
           </p>
           <Cross
             class="h-[30px] transition-all duration-200 transform rotate-180"
@@ -25,16 +25,12 @@
           class="absolute z-10 w-full bg-black"
         >
           <li
+            v-for="(option, i) in OptionValue"
+            :key="option + i"
             class="py-3 border-x-2 hover:bg-zinc-600 category-item"
-            @click="handleCategoryChange({ option: OptionValue.BAND, categoryCopy: CategoryCopy.BAND })"
+            @click="handleCategoryChange(option)"
           >
-            <p>Band</p>
-          </li>
-          <li
-            class="py-3 border-2 hover:bg-zinc-600 category-item"
-            @click="handleCategoryChange({ option: OptionValue.ALBUM, categoryCopy: CategoryCopy.ALBUM })"
-          >
-            <p>Album</p>
+            <p>{{ CategoryCopy[option] }}</p>
           </li>
         </ul>
       </div>
@@ -72,7 +68,8 @@
       @mouseleave="findHovered = false"
     >
       <Sword
-        class="bg-transparent max-w-20 rotate-[-47deg] max-h-[50px] absolute left-2 transition-all duration-200 ease-in"
+        class="bg-transparent max-w-20 rotate-[-47deg] max-h-[50px] absolute left-2 transition-all
+         duration-200 ease-in"
         :class="[
           { 'transform translate-x-14': findHovered },
           { 'transform translate-x-20 duration-50': findSelected }
@@ -80,7 +77,8 @@
       />
       FIND
       <Sword
-        class="bg-transparent max-w-20 rotate-[132deg] max-h-[50px] absolute right-2 transition-all duration-200 ease-in"
+        class="bg-transparent max-w-20 rotate-[132deg] max-h-[50px] absolute right-2
+         transition-all duration-200 ease-in"
         :class="[
           { 'transform -translate-x-14': findHovered, },
           { 'transform -translate-x-20 duration-50': findSelected },
@@ -91,19 +89,22 @@
 </template>
 
 <script setup lang="ts">
-import { OptionValue, TOptionValue, IFormData, CategoryCopy, TCategoryCopy, ErrorMsg } from '@/types'
+import { CategoryCopy, ErrorMsg, IFormData, OptionValue, TCategoryCopy, TOptionValue }
+  from '@/types'
 import { computed, ref } from 'vue'
-import Sword from '@/assets/images/sword.svg?component'
 import Cross from '@/assets/images/cross.svg?component'
+import Sword from '@/assets/images/sword.svg?component'
 import { onClickOutside } from '@vueuse/core'
 
-const emit = defineEmits(['redirect-to-ma'])
+const emit = defineEmits<{
+  (e: 'redirect-to-ma'): void
+}>()
 
 const options = ref(null)
 
 const showCategories = ref(false)
 const isInputError = ref('')
-const categoryName = ref('')
+const selectedCategory = ref<TCategoryCopy | ''>('')
 
 const findSelected = ref(false)
 const findHovered = ref(false)
@@ -119,10 +120,10 @@ onClickOutside(options, () => (showCategories.value = false))
 
 const toggleCategoriesVisibility = () => showCategories.value = !showCategories.value 
 
-const handleCategoryChange = ({ option, categoryCopy }: {option: TOptionValue, categoryCopy: TCategoryCopy}) => {
+const handleCategoryChange = (option: TOptionValue) => {
   isInputError.value = ''
   formData.value.category = option
-  categoryName.value = categoryCopy
+  if (option) selectedCategory.value = CategoryCopy[option]
   showCategories.value = !showCategories.value
 }
 
@@ -132,7 +133,7 @@ const populateStorage = (): void => {
   }
 }
 
-const redirectToMA = (): void => emit('redirect-to-ma')
+const redirectToMA = () => emit('redirect-to-ma')
 
 const errorHandler = (formData: IFormData) => {
   

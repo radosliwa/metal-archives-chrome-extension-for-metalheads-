@@ -24,8 +24,8 @@
 </template>
 
 <script setup lang="ts">
-import Pentagram from '@/assets/images/pentagram.svg?component'
 import CategoryForm from '@/components/CategoryForm.vue'
+import Pentagram from '@/assets/images/pentagram.svg?component'
 
 const redirectToMA = (): void => {
   if (chrome?.tabs) {

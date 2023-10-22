@@ -1,9 +1,3 @@
-// <option value="band_name">Band name</option>
-// <option value="album_title">Album title</option>
-// <option value="song_title">Song title</option>
-// <option value="label_name">Label</option>
-// <option value="artist_alias">Artist</option>
-
 const OptionValue = {
   BAND: 'band_name',
   ALBUM: 'album_title',
@@ -13,11 +7,11 @@ const OptionValue = {
 } as const
 
 const CategoryCopy = {
-  BAND: 'Band',
-  ALBUM: 'Album',
-  SONG: 'Song title',
-  LABEL: 'Label',
-  ARTIST: 'Artist alias',
+  [OptionValue.BAND]: 'Band',
+  [OptionValue.ALBUM]: 'Album',
+  [OptionValue.SONG]: 'Song title',
+  [OptionValue.LABEL]: 'Label',
+  [OptionValue.ARTIST]: 'Artist alias',
 } as const
 
 enum ErrorMsg {
@@ -26,17 +20,11 @@ enum ErrorMsg {
 }
 
 type TOptionValue = typeof OptionValue[keyof typeof OptionValue] | '';
-
-type TCategoryCopy = typeof CategoryCopy[keyof typeof CategoryCopy] | '';
-
+type TCategoryCopy = typeof CategoryCopy[keyof typeof CategoryCopy];
 interface IFormData {
   category: TOptionValue;
   input: string;
 }
-interface IActiveCategory {
-  optionValue: TOptionValue;
-  copy: TCategoryCopy;
-}
 
 
-export { OptionValue, ErrorMsg, CategoryCopy, TOptionValue, TCategoryCopy, IFormData, IActiveCategory }
+export { CategoryCopy, ErrorMsg, IFormData, OptionValue, TCategoryCopy, TOptionValue }
